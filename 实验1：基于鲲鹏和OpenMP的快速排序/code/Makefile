@@ -1,12 +1,15 @@
-CC = g++
-CCFLAGS = -I . -O2 -fopenmp
-LDFLAGS = # -lopenblas
+CXX ?= g++
+CXXFLAGS ?= -O3 -std=c++17 -Wall -Wextra -Wpedantic -fopenmp
+# Keep the bundled ARM executable untouched. All new artifacts stay in EX_2026.
+OUTPUT = ../../build/lab1/make/quicksort
 
-all:  quicksort
+.PHONY: all clean
+all: $(OUTPUT)
 
-quicksort: quick_sort.cpp
-	${CC} ${CCFLAGS} quick_sort.cpp -o quicksort ${LDFLAGS}
+$(OUTPUT): quick_sort.cpp sort_core.cpp sort_core.hpp
+	mkdir -p $(dir $(OUTPUT))
+	$(CXX) $(CXXFLAGS) quick_sort.cpp sort_core.cpp -o $(OUTPUT)
 
 clean:
-	rm  quicksort 
+	rm -f $(OUTPUT)
 
